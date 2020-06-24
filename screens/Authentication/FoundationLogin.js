@@ -4,81 +4,45 @@ import { Alert,ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } f
 import { Button, Block, Input, Text } from '../../components';
 import { theme } from '../../constants';
 import { Actions } from 'react-native-router-flux';
-GLOBAL = require ('../global.js');
-export default class Login extends Component {
+
+export default class FoundationLogin extends Component {
   state = {
-    femail:'',
-    fpassword:'',
     email: '',
     password: '',
     errors: [],
-    tokenstore:'',
     loading: false
   }
 
   handleLogin = async()=> {
     const { navigation } = this.props;
     const errors = [];
-    //GLOBAL.mytoken=this;
+   
     Keyboard.dismiss();
     this.setState({ loading: true });
 
-
+    if(this.state.email=='foundation@admin.com' && this.state.password=='12345678')
+    {
+      Alert.alert("Success","You have succesfuly login For Foundation Panel",
+      [
+    {
+      text: 'Continue', onPress: () => {
+         Actions.FoundationPanel();
+      }
+    }
+  ],
+  { cancelable: false })
+    }
+  
+    else{
+            Alert.alert("Error", "These credentials do not match our records");
+    }
     
-     if(this.state.email!=''){
-       if(this.state.password!=''){
-    fetch('http://192.168.1.10:8000/api/login',{
-      method:'post',
-      headers:{
-        'Content-Type':'application/json',
-       'Accept': 'application/json'
-      },
-      body:JSON.stringify({
-        
-        
-            "email":this.state.email,
-           "password":this.state.password
-         
-      })
-    })
-    .then((response)=> response.json())
-    .then((res)=>{
-      var token =res.success.token;
-       var store=JSON.stringify(res)
-      //this.setState({tokenstore:token}) 
-      GLOBAL.mytoken=token;
-      
-      this.setState({ errors, loading: false });
-      if(store==='{"error":"Unauthorised"}'){
-        Alert.alert("Error", "These credentials do not match our records");
-      }
-      else {
-          Alert.alert("Success","You have succesfuly login",
-          [
-        {
-          text: 'Continue', onPress: () => {
-             Actions.NavigationCalling();
-          }
-        }
-      ],
-      { cancelable: false })
-      }
-    }).catch((error)=>{
-      console.error(error);
-    });
-  }
-  else{
-    this.setState({ errors, loading: false });
-    Alert.alert("Please insert Password")
-  }
-}
-  else{
-    this.setState({ errors, loading: false });
-    Alert.alert("Please insert email first")
-  }
+   
 
   }
- 
+ notify(){
+    Alert.alert('Please contact with Admin Support');
+ }
 
   render() {
     const { navigation } = this.props;
@@ -114,7 +78,7 @@ export default class Login extends Component {
             </Button>
             
 
-            <Button onPress={() => navigation.navigate('Forgot')}>
+            <Button onPress={()=>this.notify()}>
               <Text gray caption center style={{ textDecorationLine: 'underline' }}>
                 Forgot your password?
               </Text>

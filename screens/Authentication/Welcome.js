@@ -144,6 +144,9 @@ class Welcome extends Component {
           <Button gradient onPress={() => navigation.navigate('Login')}>
             <Text center semibold white>Login</Text>
           </Button>
+          <Button gradient onPress={() => navigation.navigate('FoundationLogin')}>
+            <Text center semibold white>Login as Foundation</Text>
+          </Button>
           <Button shadow onPress={() => navigation.navigate('SignUp')}>
             <Text center semibold>Signup</Text>
           </Button>

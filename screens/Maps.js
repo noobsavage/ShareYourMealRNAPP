@@ -142,9 +142,9 @@ export default class Maps extends Component{
    // console.log(regionName)
     Actions.Seat({lo:this.state.logged,la:this.state.latted,address:regionName}); 
 }
-openSeatDetails=()=>{
-  Actions.ShowSeatDetails({host_id:this.state.host_id});
-}
+// openSeatDetails=()=>{
+//   Actions.ShowSeatDetails({host_id:this.state.host_id});
+// }
 
 
 // Checkingaddress = async ()=>{
@@ -194,7 +194,8 @@ openSeatDetails=()=>{
           >
                 <MapView.Marker
                 coordinate={this.state.markerPosition}
-                onPress={this.openSeatDetails}>
+                // onPress={this.openSeatDetails}
+                >
                   <View >  
                   <Icon name='chair' size={30} />
                   </View>

@@ -86,7 +86,7 @@ export default class Seat extends React.Component{
                 [
               {
                 text: 'Continue', onPress: () => {
-                   Actions.Screen();
+                  Actions.NavigationCalling();
                 }
               }
             ],

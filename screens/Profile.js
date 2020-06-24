@@ -66,7 +66,7 @@ export default class Profile extends React.Component {
       <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.titleBar}>
               <Ionicons name="ios-arrow-back" size={24} color="#52575D"
-              onPress={Actions.Screen()}
+              onPress={()=>goBack()}
               ></Ionicons>
               <Text style={{fontSize: 22,alignContent:"center",paddingBottom:10,fontWeight:"400"}}>Profile</Text>
               

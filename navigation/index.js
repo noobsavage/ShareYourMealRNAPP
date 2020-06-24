@@ -6,7 +6,9 @@ import Welcome from '../screens/Authentication/Welcome';
 import Login from '../screens/Authentication/Login';
 import SignUp from '../screens/Authentication/SignUp';
 import Forgot from '../screens/Authentication/Forgot';
-
+import FoundationLogin from '../screens/Authentication/FoundationLogin';
+import LoginScreen from '../screens/Chat/LoginScreen';
+import ChatScreen from '../screens/Chat/ChatScreen';
 
 import { theme } from '../constants';
 
@@ -15,7 +17,7 @@ const screens = createStackNavigator({
   Login,
   SignUp,
   Forgot,
-  
+  FoundationLogin
 },
 {
   defaultNavigationOptions: {
@@ -37,6 +39,13 @@ const screens = createStackNavigator({
       paddingRight: theme.sizes.base,
     },
   }
+},
+{
+  Login: LoginScreen,
+  Chat: ChatScreen
+},
+{
+  headerMode: "none"
 });
 
 export default createAppContainer(screens);

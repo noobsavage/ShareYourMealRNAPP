@@ -13,26 +13,26 @@ export default class ShowSeatDetail extends React.Component{
             
         };
     }
-    async componentDidMount(){
-        const {host_id} = this.props;
+    // async componentDidMount(){
+    //     const {host_id} = this.props;
 
-        fetch(`http://192.168.1.10:8000/api/displaySeatDatawithprofile/${host_id}`,{
-        method:'get',
-        headers:{
-          'Content-Type':'application/json',
-         'Accept': 'application/json'
-        },
+    //     fetch(`http://192.168.1.5:8000/api/displaySeatDatawithprofile/${host_id}`,{
+    //     method:'get',
+    //     headers:{
+    //       'Content-Type':'application/json',
+    //      'Accept': 'application/json'
+    //     },
   
-      }).then((response)=> response.json())
-      .then((res)=>{
-        this.setState({name:res.successProfile.name})
-        this.setState({image:res.successProfile.image})
-        this.setState({waystatus:res.successProfile.waystatus})
+    //   }).then((response)=> response.json())
+    //   .then((res)=>{
+    //     this.setState({name:res.successProfile.name})
+    //     this.setState({image:res.successProfile.image})
+    //     this.setState({waystatus:res.successProfile.waystatus})
 
-    }).catch((error)=>{
-        console.error(error);
-      }); 
-    }
+    // }).catch((error)=>{
+    //     console.error(error);
+    //   }); 
+    // }
 
 
     render(){

@@ -35,7 +35,7 @@ export default class EditProfile extends React.Component{
       };
     
       updateProfile=async()=>{
-         //console.log(this.state.name,this.state.occupation,this.state.waystatus,this.state.myuri,this.state.phone);
+       
         const result=this.state.myuri;
 
         let uriParts = result.split('.');

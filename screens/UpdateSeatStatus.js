@@ -15,7 +15,7 @@ export default class UpdateSeatStatus extends Component{
     }
 componentDidMount(){
     
-    fetch('http://192.168.1.10:8000/api/SeatsDetails',{
+    fetch('http://192.168.1.4:8000/api/SeatsDetails',{
         method:'post',
         headers:{
           'Authorization': `Bearer ${GLOBAL.mytoken}`,
@@ -34,7 +34,7 @@ componentDidMount(){
       });
 
     
-    fetch('http://192.168.1.9:8000/api/SeatStatusUpdate',{
+    fetch('http://192.168.1.10:8000/api/SeatStatusUpdate',{
         method:'put',
         headers:{
           'Authorization': `Bearer ${GLOBAL.mytoken}`,

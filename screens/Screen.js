@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity,ScrollView } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import {Header,Left,Icon,Title,Body,Right,Button} from 'native-base';
+
 import { Ionicons } from '@expo/vector-icons';
 import Maps from './Maps';
 

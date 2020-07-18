@@ -5,7 +5,7 @@ import { SearchBar } from 'react-native-elements';
 import {Button,Header,Item,Icon,Input} from 'native-base';
 import { Actions } from "react-native-router-flux";
 import TimePicker from "react-native-24h-timepicker";
-
+import {API_URL} from '../API_URL';
 import * as Location from 'expo-location';
 import { Login } from './Authentication/Login.js'
 GLOBAL = require ('./global.js');
@@ -56,7 +56,7 @@ export default class Seat extends React.Component{
     handleSeat = async(props)=> {
         const {lo,la} = this.props;
          const errors = [];
-        fetch('http://192.168.1.10:8000/api/Seats',{
+        fetch(`${API_URL}api/Seats`,{
             method:'post',
             headers:{
               'Authorization': `Bearer ${GLOBAL.mytoken}`,
@@ -105,13 +105,13 @@ export default class Seat extends React.Component{
         //    // console.log(regionName)
         //     this.setState({address:regionName})
         // })();
-        const {address} = this.props;
-        const namesList=address.map(t=>{
-            return(
-              <Text>{t.city,t.region,t.country}</Text>
+         const {address} = this.props;
+        // const namesList=address.map(t=>{
+        //     return(
+        //       <Text>{t.city,t.region,t.country}</Text>
               
-            )
-        })
+        //     )
+        // })
         const {goBack} = this.props.navigation;
         return(
             <SafeAreaView style={styles.container}>
@@ -124,7 +124,7 @@ export default class Seat extends React.Component{
                     <Ionicons name="md-more" size={24} color="#52575D"></Ionicons>
                 </View>
                 <Text style={{fontWeight:"400",fontSize:17,paddingLeft:15,paddingTop:10,paddingBottom:10}}>Current Place</Text>
-                <Text style={{fontWeight:"400",fontSize:17,paddingLeft:15,paddingTop:10,paddingBottom:10}}>{namesList}</Text>
+                <Text style={{fontWeight:"400",fontSize:17,paddingLeft:15,paddingTop:10,paddingBottom:10}}>{address}</Text>
           
                     <Text style={{fontWeight:"400",fontSize:17,paddingLeft:20,paddingTop:10,paddingBottom:10}}>Select number of seat</Text>
                     

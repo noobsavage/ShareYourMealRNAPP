@@ -7,7 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import * as Location from 'expo-location';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import UpdateSeatStatus from "./UpdateSeatStatus.js";
-
+import {API_URL} from '../API_URL';
 const {width,height}= Dimensions.get('window')
 const SCREEN_HEIGHT = height 
 const SCREEN_WIDTH = width
@@ -28,6 +28,7 @@ export default class Maps extends Component{
       status:0,
       address:[],
       host_id:'',
+      data:'',
       milisecond:'',
       initialRegion:{
         latitude:0,
@@ -91,7 +92,7 @@ export default class Maps extends Component{
     
     //Get Data from Seat Table 
     const errors = [];
-    fetch('http://192.168.1.10:8000/api/SeatsDetails',{
+    fetch(`${API_URL}api/SeatsDetails`,{
         method:'post',
         headers:{
           'Authorization': `Bearer ${GLOBAL.mytoken}`,
@@ -101,33 +102,35 @@ export default class Maps extends Component{
   
       }).then((response)=> response.json())
       .then((res)=>{
-        //var host_id=res.success.host_id;
-        //var longitudeRS=res.success.longitude;
-        //var latitudeRS=res.success.latitude;
-        this.setState({host_id:res.success.host_id});
-        var noOfSeat=res.success.No_of_seat;
-        var time=res.success.time;
-        var status=res.success.status;
-        this.setState({status:status})
-        var timeParts = time.split(":");
-        var finaltime=((+timeParts[0] * (60000 * 60)) + (+timeParts[1] * 60000));
-        this.setState({milisecond:finaltime})
-        var lastRegion={
-          longitude:res.success.longitude,
-          latitude:res.success.latitude,
-          latitudeDelta:LATITUDE_DELTA,
-          longitudeDelta:LONGITUDE_DELTA
-          
-        } 
-        this.setState({initialPosition:lastRegion})
-      this.setState({markerPosition:lastRegion})
+        if(!res.success)
+    {  
+      console.log("nothing")
+  }
 
+  else{
+    this.setState({host_id:res.success.host_id});
+    var noOfSeat=res.success.No_of_seat;
+    var time=res.success.time;
+    this.setState({status:res.success.status})
+    var timeParts = time.split(":");
+    var finaltime=((+timeParts[0] * (60000 * 60)) + (+timeParts[1] * 60000));
+    this.setState({milisecond:finaltime})
+    var lastRegion={
+      longitude:res.success.longitude,
+      latitude:res.success.latitude,
+      latitudeDelta:LATITUDE_DELTA,
+      longitudeDelta:LONGITUDE_DELTA
+      
+    } 
+    this.setState({initialPosition:lastRegion})
+  this.setState({markerPosition:lastRegion})
+  }
       
        
       }).catch((error)=>{
         console.error(error);
       });
-
+//this.Checkingaddress();
      
 
 
@@ -138,23 +141,47 @@ export default class Maps extends Component{
     navigator.geolocation.clearWatch(this.watchID)
   }
   _continue = async () => {
-    let regionName = await Location.reverseGeocodeAsync( { longitude: this.state.logged, latitude:this.state.latted } );
-   // console.log(regionName)
-    Actions.Seat({lo:this.state.logged,la:this.state.latted,address:regionName}); 
+    const myapikey=`AIzaSyCSolZfxX4dMP1_o6gNfXw8yf0X_J8GKzI`
+
+  fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.latted + ',' + this.state.logged + '&key=' + myapikey)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson)
+           const addressarray=responseJson.results;
+           const filterdata=addressarray.map(item=>( 
+            item.formatted_address
+            ))
+            
+          Actions.Seat({address:filterdata[0]});
+          })
+
+    
+    
 }
 // openSeatDetails=()=>{
 //   Actions.ShowSeatDetails({host_id:this.state.host_id});
 // }
 
 
-// Checkingaddress = async ()=>{
-//   const myapikey=`AIzaSyAdmNAxXWdCMaiwG0iOzPqoxBUMcafM78E`
-//   fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + 33.7601 + ',' + 73.0658 + '&key=' + myapikey)
-//         .then((response) => response.json())
-//         .then((responseJson) => {
-//             console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
-// })
-// }
+Checkingaddress = async ()=>{
+  // const myapikey=`AIzaSyCSolZfxX4dMP1_o6gNfXw8yf0X_J8GKzI`
+  // fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.latted + ',' + this.state.logged + '&key=' + myapikey)
+  //       .then((response) => response.json())
+  //       .then((responseJson) => {
+  //         //  console.log('ADDRESS GEOCODE is BACK!! => ' + responseJson.results.formatted_address);
+  //            //this.setState({data:responseJson.results}) 
+  //          const addressarray=responseJson.results;
+           
+  //          const filterdata=addressarray.map(item=>( 
+  //           item.formatted_address
+  //           ))
+  //         this.setState({data:filterdata[0]})
+  //         })
+
+    
+          
+  
+}
 
 // sleep = async(ms)=>{
 //   return new Promise(resolve => setTimeout(resolve, ms));

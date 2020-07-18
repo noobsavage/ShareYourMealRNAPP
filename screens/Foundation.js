@@ -1,13 +1,12 @@
 import React from 'react';
-import {View,Text,SafeAreaView, StyleSheet, TouchableOpacity,TextInput,KeyboardAvoidingView, Alert} from 'react-native';
+import {View,Text,SafeAreaView,StyleSheet,Picker,TouchableOpacity,TextInput,KeyboardAvoidingView, Alert} from 'react-native';
 import {Ionicons,MaterialCommunityIcons,FontAwesome} from "@expo/vector-icons";
 import { Input ,Item, Label,Textarea,Button} from 'native-base';
 import { ScrollView } from 'react-native-gesture-handler';
-//import { Constants, ImagePicker, Permissions } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import { Actions } from 'react-native-router-flux';
-
+import {API_URL} from '../API_URL';
 export default class Foundation extends React.Component{
     constructor() {
         super();
@@ -18,7 +17,13 @@ export default class Foundation extends React.Component{
           quantity:'',
           phone:'',
           description:'',
+          selected:'',
         };
+      }
+      onValueChange(value) {
+        this.setState({
+          selected: value
+        });
       }
     
       _takePhoto = async () => {
@@ -52,12 +57,14 @@ export default class Foundation extends React.Component{
         const quantity=this.state.quantity;
         const phone=this.state.phone;
         const description=this.state.description;
+        const fname=this.state.selected;
         
             // Upload the image using the fetch and FormData APIs
             let formData = new FormData();
             // Assume "photo" is the name of the form field the server expects
             formData.append('image', { uri: result, name: `photo.${fileType}`,type: `image/${fileType}`,});
             formData.append('name',name);
+            formData.append('foundationName',fname);
             formData.append('quantity',quantity);
             formData.append('phone',phone);
             formData.append('description',description);
@@ -65,11 +72,11 @@ export default class Foundation extends React.Component{
         
             const {goBack} = this.props.navigation;
 
-       await fetch('http://192.168.1.10:8000/api/mealdonation',{
+       await fetch(`${API_URL}api/mealdonation`,{
             method:'post',
             headers:{
               'Authorization': `Bearer ${GLOBAL.mytoken}`,
-              //'Content-Type':'multipart/form-data',
+             
              'Accept': 'application/json'
             },
             body:
@@ -100,9 +107,14 @@ export default class Foundation extends React.Component{
      
     render(){
         const {goBack} = this.props.navigation;
+       
         return(
             <SafeAreaView style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={true} style={{marginHorizontal:10}}>
+                <ScrollView showsVerticalScrollIndicator={true} >
+                <KeyboardAvoidingView
+                      
+                      behavior="padding"
+                    >
                 <View style={styles.titleBar}>
                     <Ionicons name="ios-arrow-back" size={24} color="#52575D"
                     onPress={() => goBack()}
@@ -117,6 +129,18 @@ export default class Foundation extends React.Component{
             <FontAwesome name="camera" size={35} style={{justifyContent:"center",marginTop:17,alignSelf:"center"}}/>
             
             </TouchableOpacity>
+            <Label style={{paddingLeft:30}}>Please Select Foundation</Label>
+            <View>
+            <Picker
+                selectedValue={this.state.selected}
+                onValueChange={(itemValue,itemIndex)=>this.setState({selected:itemValue})}
+                style={{width:'100%'}}
+                >
+                <Picker.Item label="Al Khidmat Foundation" value="AlKhidmat" />
+                <Picker.Item label="Fouji Foundation" value="AlFouji" />    
+                <Picker.Item label="Eidhi Foundation" value="AlEidhi" />        
+          </Picker>
+          </View>
             <Item floatingLabel style={{marginTop:10}}>
               <Label style={{marginLeft:30}}>Meal Name </Label>
               <Input  style={{marginLeft:10,marginRight:10}}
@@ -143,6 +167,7 @@ export default class Foundation extends React.Component{
             onPress={()=>this.donatemeal()}>
                         <Text>Send Request</Text>
                         </Button>
+                        </KeyboardAvoidingView>
             </ScrollView>
             </SafeAreaView>
     

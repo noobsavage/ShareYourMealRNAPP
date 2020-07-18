@@ -3,7 +3,7 @@ import {View,StyleSheet,SafeAreaView,Image, Linking, Platform } from 'react-nati
 import {Ionicons, AntDesign} from "@expo/vector-icons";
 import { ScrollView, FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import {  Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body } from 'native-base';
-
+import {API_URL} from '../API_URL';
 export default class FoundationPanel extends Component{
 state={
     data:[],
@@ -14,7 +14,7 @@ state={
         this.fetchData();
     }
     fetchData = async ()=>{
-        const response= await fetch("http://192.168.1.10:8000/api/mealdetails");
+        const response= await fetch(`${API_URL}/api/mealdetails`);
         const json = await response.json();
         this.setState({data:json});
     }

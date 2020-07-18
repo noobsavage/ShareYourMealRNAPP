@@ -4,7 +4,7 @@ import { Ionicons,MaterialIcons } from "@expo/vector-icons";
 import Screen from './Screen';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 import { Actions } from 'react-native-router-flux';
-
+import {API_URL} from '../API_URL';
 export default class Profile extends React.Component {
     constructor(props){
         super(props);
@@ -34,7 +34,7 @@ export default class Profile extends React.Component {
     };
     
     componentDidMount(){
-        fetch('http://192.168.1.10:8000/api/displayProfileData',{
+        fetch(`${API_URL}api/displayProfileData`,{
         method:'post',
         headers:{
           'Authorization': `Bearer ${GLOBAL.mytoken}`,
@@ -44,13 +44,17 @@ export default class Profile extends React.Component {
   
       }).then((response)=> response.json())
       .then((res)=>{
-        this.setState({userid:res.success.user_id})
+          if(!res.success){
+              console.log("Nothing");
+          }
+          else
+          {    this.setState({userid:res.success.user_id})
         this.setState({name:res.success.name})
         this.setState({occupation:res.success.occupation})
         this.setState({waystatus:res.success.waystatus})
         this.setState({image:res.success.image})
         this.setState({phone:res.success.phone})
-        this.setState({email:res.successEmail})
+        this.setState({email:res.successEmail})}
 
     }).catch((error)=>{
         console.error(error);
@@ -66,7 +70,7 @@ export default class Profile extends React.Component {
       <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.titleBar}>
               <Ionicons name="ios-arrow-back" size={24} color="#52575D"
-              onPress={()=>goBack()}
+              onPress={()=>NavigationCalling()}
               ></Ionicons>
               <Text style={{fontSize: 22,alignContent:"center",paddingBottom:10,fontWeight:"400"}}>Profile</Text>
               
@@ -144,7 +148,7 @@ export default class Profile extends React.Component {
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View style={styles.titleBar}>
                             <Ionicons name="ios-arrow-back" size={24} color="#52575D"
-                            onPress={() => goBack()}
+                            onPress={() => Actions.NavigationCalling()}
                             ></Ionicons>
                             <Text style={{fontSize: 22,alignContent:"center",paddingBottom:10,fontWeight:"400"}}>Profile</Text>
                             
@@ -228,7 +232,7 @@ export default class Profile extends React.Component {
 
     },
     text:{
-    fontFamily:"HelveticaNeue",
+    
     color:"#52575D",
     },
     subText:{

@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Actions } from 'react-native-router-flux';
-
+import {API_URL} from '../API_URL';
 GLOBAL = require ('./global.js');
 
 
@@ -27,7 +27,9 @@ export default class EditProfile extends React.Component{
 
     selectPicture = async () => {
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        
         const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync({
+         
           aspect: 1,
           allowsEditing: true,
         });
@@ -58,7 +60,7 @@ export default class EditProfile extends React.Component{
         
             const {goBack} = this.props.navigation;
 
-       await fetch('http://192.168.1.10:8000/api/EditProfile',{
+       await fetch(`${API_URL}api/EditProfile`,{
             method:'post',
             headers:{
               'Authorization': `Bearer ${GLOBAL.mytoken}`,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
-
+import { Alert, ScrollView,ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import {API_URL} from '../../API_URL';
 import { Button, Block, Input, Text } from '../../components';
 import { theme } from '../../constants';
 
@@ -25,7 +25,7 @@ export default class SignUp extends Component {
       if((this.state.password.length)>=8){
       if(this.state.password===(this.state.cPassword)){
         
-      fetch('http://192.168.1.10:8000/api/register',{
+      fetch(`${API_URL}api/register`,{
         method:'post',
         headers:{
           'Content-Type':'application/json',
@@ -92,6 +92,7 @@ export default class SignUp extends Component {
     const hasErrors = key => errors.includes(key) ? styles.hasErrors : null;
 
     return (
+      <ScrollView>
       <KeyboardAvoidingView style={styles.signup} behavior="padding">
         <Block padding={[0, theme.sizes.base * 2]}>
           <Text h1 bold>Sign Up</Text>
@@ -144,6 +145,7 @@ export default class SignUp extends Component {
           </Block>
         </Block>
       </KeyboardAvoidingView>
+      </ScrollView>
     )
   }
 }

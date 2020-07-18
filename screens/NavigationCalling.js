@@ -2,6 +2,7 @@ import React from "react";
 
 import { createAppContainer } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
+import {API_URL} from '../API_URL';
 import { Dimensions } from "react-native";
 GLOBAL = require ('./global.js');
 
@@ -18,7 +19,7 @@ import SideBar from "../components/SideBar";
 
 export default class NavigationCalling extends React.Component{
     componentDidMount(){
-        fetch('http://192.168.1.10:8000/api/displayProfileData',{
+        fetch(`${API_URL}/api/displayProfileData`,{
         method:'post',
         headers:{
           'Authorization': `Bearer ${GLOBAL.mytoken}`,
@@ -28,10 +29,12 @@ export default class NavigationCalling extends React.Component{
   
       }).then((response)=> response.json())
       .then((res)=>{
-          
+          if(!res.success){
+            console.log("Nothing")
+          }else{
         GLOBAL.name=res.success.name;
         GLOBAL.image=res.success.image;
-        
+          }
     }).catch((error)=>{
         console.error(error);
       }); 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Alert,ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native'
-
+import {API_URL} from '../../API_URL';
 import { Button, Block, Input, Text } from '../../components';
 import { theme } from '../../constants';
 import { Actions } from 'react-native-router-flux';
+import { ScrollView } from 'react-native-gesture-handler';
 GLOBAL = require ('../global.js');
 export default class Login extends Component {
   state = {
@@ -17,6 +18,8 @@ export default class Login extends Component {
   }
 
   handleLogin = async()=> {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+
     const { navigation } = this.props;
     const errors = [];
     //GLOBAL.mytoken=this;
@@ -26,8 +29,9 @@ export default class Login extends Component {
 
     
      if(this.state.email!=''){
+      if(reg.test(this.state.email)===true){
        if(this.state.password!=''){
-    fetch('http://192.168.1.10:8000/api/login',{
+    fetch(`${API_URL}api/login`,{
       method:'post',
       headers:{
         'Content-Type':'application/json',
@@ -43,16 +47,15 @@ export default class Login extends Component {
     })
     .then((response)=> response.json())
     .then((res)=>{
-      var token =res.success.token;
-       var store=JSON.stringify(res)
+        var store=JSON.stringify(res)
       //this.setState({tokenstore:token}) 
-      GLOBAL.mytoken=token;
       
       this.setState({ errors, loading: false });
       if(store==='{"error":"Unauthorised"}'){
         Alert.alert("Error", "These credentials do not match our records");
       }
       else {
+        GLOBAL.mytoken=res.success.token;
           Alert.alert("Success","You have succesfuly login",
           [
         {
@@ -71,6 +74,10 @@ export default class Login extends Component {
     this.setState({ errors, loading: false });
     Alert.alert("Please insert Password")
   }
+}else{
+  this.setState({ errors, loading: false });
+  Alert.alert("Please provide appropriate email")
+}
 }
   else{
     this.setState({ errors, loading: false });
@@ -86,6 +93,7 @@ export default class Login extends Component {
     const hasErrors = key => errors.includes(key) ? styles.hasErrors : null;
 
     return (
+      <ScrollView>
       <KeyboardAvoidingView style={styles.login} behavior="padding">
         <Block padding={[0, theme.sizes.base * 2]}>
           <Text h1 bold>Login</Text>
@@ -122,6 +130,7 @@ export default class Login extends Component {
           </Block>
         </Block>
       </KeyboardAvoidingView>
+      </ScrollView>
     )
   }
 }

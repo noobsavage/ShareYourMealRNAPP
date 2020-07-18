@@ -34,7 +34,7 @@ componentDidMount(){
       });
 
     
-    fetch('http://192.168.1.10:8000/api/SeatStatusUpdate',{
+    fetch('http://192.168.1.8:8000/api/SeatStatusUpdate',{
         method:'put',
         headers:{
           'Authorization': `Bearer ${GLOBAL.mytoken}`,

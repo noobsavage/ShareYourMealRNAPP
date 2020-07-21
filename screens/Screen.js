@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity,ScrollView } fro
 
 import { Ionicons } from '@expo/vector-icons';
 import Maps from './Maps';
+import { Actions } from "react-native-router-flux";
 
 export default class Screen extends React.Component {
     render() {
@@ -13,8 +14,10 @@ export default class Screen extends React.Component {
           <View style={styles.titleBar}>
               <Ionicons name="md-menu" size={27} color="#52575D" onPress={this.props.navigation.openDrawer}></Ionicons>
               <Text style={{fontSize: 20,alignContent:"center",paddingBottom:10}}>Seats</Text>
+              <TouchableOpacity
+              onPress={()=>Actions.Notifications()}>
               <Ionicons name="md-notifications" size={27} color="#52575D"></Ionicons>
-             
+              </TouchableOpacity>
           </View>
           <View style={{marginTop:0,flex:1}}>
           <Maps/>

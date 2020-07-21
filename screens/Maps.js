@@ -4,6 +4,8 @@ import {View,StyleSheet,Text,Dimensions,Slider,Alert} from "react-native";
 import { Container, Header, Content, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Actions } from 'react-native-router-flux';
+import { MaterialIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import UpdateSeatStatus from "./UpdateSeatStatus.js";
@@ -92,6 +94,7 @@ export default class Maps extends Component{
     
     //Get Data from Seat Table 
     const errors = [];
+    
     fetch(`${API_URL}api/SeatsDetails`,{
         method:'post',
         headers:{
@@ -141,18 +144,21 @@ export default class Maps extends Component{
     navigator.geolocation.clearWatch(this.watchID)
   }
   _continue = async () => {
+    let regionName = await Location.reverseGeocodeAsync( { longitude: this.state.logged, latitude:this.state.latted } );
+   
+    
     const myapikey=`AIzaSyCSolZfxX4dMP1_o6gNfXw8yf0X_J8GKzI`
 
   fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.state.latted + ',' + this.state.logged + '&key=' + myapikey)
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log(responseJson)
+          //console.log(responseJson)
            const addressarray=responseJson.results;
            const filterdata=addressarray.map(item=>( 
             item.formatted_address
             ))
             
-          Actions.Seat({address:filterdata[0]});
+          Actions.Seat({lo:this.state.logged,la:this.state.latted,address:filterdata[0]});
           })
 
     
@@ -207,54 +213,62 @@ Checkingaddress = async ()=>{
 
   render() {
     
-    switch(this.state.status){
-    case 1:
-    return(
-        <View style={styles.container}>
+  //   switch(this.state.status){
+  //   case 1:
+  //   return(
+  //       <View style={styles.container}>
       
-        <MapView
-          provider="google"
-          style={styles.map}
-          initialRegion={this.state.initialPosition}
-          mapType="standard"
-          showsCompass={true}
-          >
-                <MapView.Marker
-                coordinate={this.state.markerPosition}
-                // onPress={this.openSeatDetails}
-                >
-                  <View >  
-                  <Icon name='chair' size={30} />
-                  </View>
-                </MapView.Marker>
+  //       <MapView
+  //         provider="google"
+  //         style={styles.map}
+  //         initialRegion={this.state.initialPosition}
+  //         mapType="standard"
+  //         showsCompass={true}
+  //         >
+  //               <MapView.Marker
+  //               coordinate={this.state.markerPosition}
+  //               // onPress={this.openSeatDetails}
+  //               >
+  //                 <View >  
+  //                 <Icon name='chair' size={30} />
+  //                 </View>
+  //               </MapView.Marker>
             
-          </MapView>
+  //         </MapView>
           
-          <View style={styles.cardbottom}>
+  //         <View style={styles.cardbottom}>
          
-                <Container style={{flexDirection: 'column',paddingTop:13}}>
-               <Button rounded light style={{height:50,width:240,justifyContent:'center',shadowOpacity: 0.3,marginTop:30}}
+  //               <Container style={{flexDirection: 'column',paddingTop:13}}>
+  //              <Button rounded light style={{height:50,width:240,justifyContent:'center',shadowOpacity: 0.3,marginTop:20}}
                  
                
-                  onPress={this._continue}
-                   >
-                  <Icon name='chair' size={30} />
-                  <Text style={{fontWeight: 'bold'}}>   Create Seat</Text>
+  //                 onPress={this._continue}
+  //                  >
+  //                 <Icon name='chair' size={30} />
+  //                 <Text style={{fontWeight: 'bold'}}>   Create Seat</Text>
 
-                </Button>
-                </Container>
-                <Container style={{flexDirection: 'column',paddingTop:5}}>
-                  
-                </Container>
-          </View>
-      {/* <UpdateSeatStatus/>    
-       */}
-      </View>
+  //               </Button>
+  //               </Container>
+  //               <Container style={{flexDirection: 'column',paddingTop:13}}>
+  //               <Button rounded light style={{height:50,width:240,justifyContent:'center',shadowOpacity: 0.3,marginTop:10}}
+  //                 //onPress={()=>Actions.AvailableSeat()}
+  //                 onPress={()=>Actions.AvailableSeat()}
+  //                 >
+                 
+  //                <Text style={{fontWeight: 'bold'}}>   Available Seat</Text>
+
+  //              </Button>
+
+  //               </Container>
+  //         </View>
+  //     {/* <UpdateSeatStatus/>    
+  //      */}
+  //     </View>
       
-      );
-      break;
+  //     );
+  //     break;
       
-   case 0: 
+  //  case 0: 
     return (
       
       <View style={styles.container}>
@@ -283,9 +297,8 @@ Checkingaddress = async ()=>{
           <View style={styles.cardbottom}>
           
                 <Container style={{flexDirection: 'column',paddingTop:13}}>
-               <Button rounded light style={{height:50,width:240,justifyContent:'center',shadowOpacity: 0.3,marginTop:30}}
+               <Button rounded light style={{height:50,width:240,justifyContent:'center',shadowOpacity: 0.3,marginTop:10}}
                  
-               
                   onPress={this._continue}
                    >
                   <Icon name='chair' size={30} />
@@ -293,17 +306,33 @@ Checkingaddress = async ()=>{
 
                 </Button>
                 </Container>
-                <Container style={{flexDirection: 'column',paddingTop:5}}>
-                  
+                <Container style={{flexDirection: 'column'}}>
+                <Button rounded light style={{height:50,width:240,justifyContent:'center',shadowOpacity: 0.3,marginTop:5}}
+                onPress={()=>Actions.AvailableSeat()}
+                  >
+                  <MaterialIcons name="event-available" size={30} color="black" />
+                 <Text style={{fontWeight: 'bold'}}>   Available Seat</Text>
+               </Button>
                 </Container>
+                <Container style={{flexDirection: 'column'}}>
+                <Button rounded light style={{height:50,width:240,justifyContent:'center',shadowOpacity: 0.3,marginTop:5}}
+                onPress={()=>Actions.ReservedSeats()}
+                  >
+                  <AntDesign name="save" size={30} color="black" />
+                 <Text style={{fontWeight: 'bold'}}>  Reserved Seat</Text>
+               </Button>
+                </Container>
+              
+                
           </View>
         
         
         
       </View>
     )
-    break ;
-              }
+  //   break ;
+            
+  // }
           }
         }
 
@@ -343,7 +372,7 @@ const styles = StyleSheet.create({
   },
   cardbottom:{
     width:'100%',
-    height:190,
+    height:220,
     backgroundColor:'#ffff',
     //justifyContent:'center',
     alignItems:'center',

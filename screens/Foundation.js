@@ -47,7 +47,7 @@ export default class Foundation extends React.Component{
       };
       
       donatemeal=async()=>{
-       
+        var letters = /^[A-Za-z]+$/;
         const result=this.state.myuri;
 
         let uriParts = result.split('.');
@@ -58,6 +58,15 @@ export default class Foundation extends React.Component{
         const phone=this.state.phone;
         const description=this.state.description;
         const fname=this.state.selected;
+        if(result!=''){
+          if(fname!=''){
+          if(name!=''){
+            if(letters.test(name)===true){
+            if(quantity!=''){
+              if(phone!=''){
+                if((phone.length)>=11){
+                if(description!=''){
+                 
         
             // Upload the image using the fetch and FormData APIs
             let formData = new FormData();
@@ -102,6 +111,36 @@ export default class Foundation extends React.Component{
           }).catch((error)=>{
             console.error(error);
           });
+        }else{
+          Alert.alert("Please Enter Description of Meal")
+        }
+                }else{
+                  Alert.alert("Phone have'nt appropriate Length")
+                }   
+      
+      }
+        else{
+         Alert.alert("Please Enter Phone Number")  
+        }
+        }
+        else{
+          Alert.alert("Please Enter Quantity")
+        }
+      }
+      else{
+        Alert.alert("Please Enter Proper Alphabet Characters")
+      }
+        }
+        else{
+          Alert.alert("Please Enter Meal Name")
+        }
+        }else{
+          Alert.alert("Please Select Foundation")
+        }
+
+        }else{
+          Alert.alert("Please Capture Image")
+        }
       }
 
      
@@ -165,7 +204,7 @@ export default class Foundation extends React.Component{
             onChangeText={(description) => this.setState({description})} />
             <Button rounded style={styles.postSeat}
             onPress={()=>this.donatemeal()}>
-                        <Text>Send Request</Text>
+                        <Text>Donate</Text>
                         </Button>
                         </KeyboardAvoidingView>
             </ScrollView>

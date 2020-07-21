@@ -13,14 +13,17 @@ export default class SignUp extends Component {
     errors: [],
     loading: false,
   }
-
-  handleSignUp = async()=> {
+//  && this.state.username!='' && this.state.password!='' && this.state.cPassword!='' 
+ handleSignUp = async()=> {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     const { navigation } = this.props;
     const errors = [];
     Keyboard.dismiss();
     this.setState({ loading: true });
-    if(this.state.email!='' && this.state.username!='' && this.state.password!='' && this.state.cPassword!='' ){
+    if(this.state.username!=''){
+      if(this.state.email!=''){
+        if(this.state.password!=''){
+        if(this.state.cPassword!=''){
      if(reg.test(this.state.email)===true){
       if((this.state.password.length)>=8){
       if(this.state.password===(this.state.cPassword)){
@@ -76,12 +79,23 @@ export default class SignUp extends Component {
   this.setState({ errors, loading: false });
   Alert.alert("Email is not Correct")
 }
+        }else{
+          Alert.alert("Please Enter the Confirm Password")
+        }
+      }
+      else{
+        Alert.alert("Please Enter the Password")
+      }
+    }
+    else{
+        Alert.alert("Please Enter the Email")
+    }
   }
 
     else
     {
       this.setState({ errors, loading: false });
-      Alert.alert("Please fill all fields")
+      Alert.alert("Please Enter the UserName First")
     }
     
   }

@@ -48,18 +48,18 @@ export default class ShowSeatDetail extends React.Component{
                     <Text style={{fontSize: 22,fontWeight:"400",justifyContent:"center",marginLeft:110}}>Seat Details</Text>
             </View>
                 <View style={styles.containerBox}>
-                <View style={styles.profileImage}>
+                {/* <View style={styles.profileImage}>
                 <Image source={require("../assets/profile-pic.jpg")} style={styles.image} resizeMode="center"></Image>
                 
-                </View>
+                </View> */}
                 <View style={styles.infoContainer}>
-              <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Faraz {host_id}</Text>
+              <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Faraz</Text>
                 </View>
                 <View style={styles.statsContainer}>
-              <View style={styles.statsBox}>
+              {/* <View style={styles.statsBox}>
                   <Text style={[styles.text, { fontSize: 24 }]}>Status</Text>
                   <Text style={[styles.text, styles.subText]}>now</Text>
-              </View>
+              </View> */}
               <View style={[styles.statsBox, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
                   <Text style={[styles.text, { fontSize: 24 }]}>Restaurant</Text>
                   <Text style={[styles.text, styles.subText]}>Triple One</Text>
@@ -121,7 +121,7 @@ containerBox:{
     borderRadius: 8,
     borderWidth: 0.8,
     borderColor: '#323643',
-    marginBottom:100
+    marginBottom:300
 },
 infoContainer:{
     flexDirection:"row",

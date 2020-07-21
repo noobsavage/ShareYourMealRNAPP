@@ -1,8 +1,8 @@
 import React from "react";
-import {Text,View,SafeAreaView,ScrollView,StyleSheet,TouchableOpacity, Alert} from "react-native";
+import {Text,View,SafeAreaView,ScrollView,Picker,StyleSheet,TouchableOpacity,KeyboardAvoidingView, Alert} from "react-native";
 import { Ionicons,MaterialIcons } from "@expo/vector-icons"
 import { SearchBar } from 'react-native-elements';
-import {Button,Header,Item,Icon,Input} from 'native-base';
+import {Button,Header,Item,Icon,Input,Label} from 'native-base';
 import { Actions } from "react-native-router-flux";
 import TimePicker from "react-native-24h-timepicker";
 import {API_URL} from '../API_URL';
@@ -18,9 +18,16 @@ export default class Seat extends React.Component{
           seatNo:"",
           errors: [],
           status:'',
+          selected:'',
+          name:'',
+          Check:'',
         };
       }
-     
+      onValueChange(value) {
+        this.setState({
+          selected: value
+        });
+      }
       onCancel() {
         this.TimePicker.close();
       }
@@ -53,9 +60,32 @@ export default class Seat extends React.Component{
         value=6
           this.setState({seatNo:value})
     }
+
+    componentDidMount(){
+      fetch(`${API_URL}api/NotmorethanoneSeat`,{
+        method:'get',
+        headers:{
+          'Authorization': `Bearer ${GLOBAL.mytoken}`,
+          'Content-Type':'application/json',
+         'Accept': 'application/json'
+        },
+  
+      }).then((response)=> response.json())
+      .then((res)=>{
+          this.setState({Check:res.success})
+      })
+      
+    }
+    
     handleSeat = async(props)=> {
         const {lo,la} = this.props;
          const errors = [];
+        
+         if(this.state.selected!=''){
+           if(this.state.name!=''){
+             if(this.state.seatNo!=''){
+               if(this.state.time!=''){
+        if(this.state.Check==="0"){
         fetch(`${API_URL}api/Seats`,{
             method:'post',
             headers:{
@@ -68,6 +98,8 @@ export default class Seat extends React.Component{
                 
                 "longitude":lo,
                 "latitude":la,
+                "name":this.state.name,
+                "placeName":this.state.selected,
                 "No_of_seat":this.state.seatNo,
                 "time":this.state.time,
                 "status":1
@@ -95,7 +127,28 @@ export default class Seat extends React.Component{
           }).catch((error)=>{
             console.error(error);
           });
-          
+        }
+        else{
+          Alert.alert("Your Seat is already Created")
+        }
+        
+      }else{
+        Alert.alert("Please Select Time")
+      }  
+
+      }else{
+        Alert.alert("Please Select Number of Seats")
+      }
+
+      }
+      else{
+        Alert.alert("Please Enter the Name")
+      }
+
+      }
+      else{
+        Alert.alert("Please Select Restaurant Name")
+      }
     }
       
 
@@ -115,7 +168,8 @@ export default class Seat extends React.Component{
         const {goBack} = this.props.navigation;
         return(
             <SafeAreaView style={styles.container}>
-            
+            <ScrollView>
+            <KeyboardAvoidingView  behavior="padding">
                 <View style={styles.titleBar}>
                     <Ionicons name="ios-arrow-back" size={24} color="#52575D"
                     onPress={() => goBack()}
@@ -123,10 +177,45 @@ export default class Seat extends React.Component{
                     <Text style={{fontSize: 22,alignContent:"center",paddingBottom:10,fontWeight:"400"}}>Post Seat</Text>
                     <Ionicons name="md-more" size={24} color="#52575D"></Ionicons>
                 </View>
-                <Text style={{fontWeight:"400",fontSize:17,paddingLeft:15,paddingTop:10,paddingBottom:10}}>Current Place</Text>
+                <Text style={{fontWeight:"700",fontSize:17,paddingLeft:15,paddingTop:10,paddingBottom:10}}>Current Place</Text>
                 <Text style={{fontWeight:"400",fontSize:17,paddingLeft:15,paddingTop:10,paddingBottom:10}}>{address}</Text>
-          
-                    <Text style={{fontWeight:"400",fontSize:17,paddingLeft:20,paddingTop:10,paddingBottom:10}}>Select number of seat</Text>
+                <Label style={{fontWeight:"700",paddingLeft:15}}>Please Select Restaurant Name</Label>
+            <View>
+            <Picker
+                selectedValue={this.state.selected}
+                onValueChange={(itemValue,itemIndex)=>this.setState({selected:itemValue})}
+                style={{width:'100%'}}
+                >
+                <Picker.Item label="1. Usmania Restaurant" value="Usmania Restaurant" />
+                <Picker.Item label="2. MNAK Restaurant Abbottabad" value="MNAK Restaurant Abbottabad" />    
+                <Picker.Item label="3. Cafe Route 35" value="Cafe Route 35" />
+                <Picker.Item label="4. Saif Restaurant" value="Saif Restaurant" />
+                <Picker.Item label="5. Coffity" value="Coffity" />    
+                <Picker.Item label="6. Pizza Originale" value="Pizza Originale" />
+                <Picker.Item label="7. Subway" value="Subway" />
+                <Picker.Item label="8. Pizza Originale" value="Pizza Originale" />    
+                <Picker.Item label="9. Pak Afghan Aryana Hotel" value="Pak Afghan Aryana Hotel" />
+                <Picker.Item label="10. Baithak Restaurant" value="Baithak Restaurant" />
+                <Picker.Item label="11. Food Planet" value="Food Planet" />    
+                <Picker.Item label="12. 92 Pizza" value="92 Pizza" />
+                <Picker.Item label="13. Pizza Square Abbottabad" value="Pizza Square Abbottabad" />
+                <Picker.Item label="14. Red Onion" value="Red Onion" />    
+                <Picker.Item label="15. Mr.Cod" value="Mr.Cod" />
+                <Picker.Item label="16. Mojo Broast House" value="Mojo Broast House" />
+                <Picker.Item label="17. De Minister Cafe" value="De Minister Cafe" />    
+                <Picker.Item label="18. Takeaway Foods" value="Takeaway Foods" />
+                <Picker.Item label="19. 92 Pizza" value="92 Pizza" />
+                <Picker.Item label="20. Tripleone" value="Tripleone" />    
+                <Picker.Item label="21. Chaaye Khana" value="Chaaye Khana" />        
+          </Picker>
+          <Item floatingLabel style={{marginTop:10}}>
+              <Label style={{marginLeft:30,fontWeight:"700"}}>Please Enter Name for public Seat </Label>
+              <Input  style={{marginLeft:10,marginRight:10}}
+                  onChangeText={(name) => this.setState({name})}
+              />
+            </Item>
+          </View>
+                    <Text style={{fontWeight:"700",fontSize:17,paddingLeft:20,paddingTop:10,paddingBottom:10}}>Select number of seat</Text>
                     
                     <View style={styles.infoContainer}>                   
                         <Button rounded style={styles.buttonSeat}
@@ -157,7 +246,7 @@ export default class Seat extends React.Component{
                         <Text>6</Text>
                         </Button>
                     </View>
-                    <Text style={{fontWeight:"400",fontSize:17,paddingLeft:20,marginTop:20,paddingBottom:10}}>Select Time</Text>
+                    <Text style={{fontWeight:"700",fontSize:17,paddingLeft:20,marginTop:20,paddingBottom:10}}>Seat Expire Time Duration</Text>
                     <TouchableOpacity
                         onPress={() => this.TimePicker.open()}
                         style={styles.button}
@@ -178,6 +267,8 @@ export default class Seat extends React.Component{
                         >
                         <Text>Post</Text>
                         </Button>
+                        </KeyboardAvoidingView>
+                        </ScrollView>
                 </SafeAreaView>
         );
     }

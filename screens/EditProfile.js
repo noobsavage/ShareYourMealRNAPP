@@ -47,7 +47,12 @@ export default class EditProfile extends React.Component{
         const occupation=this.state.occupation;
         const waystatus=this.state.waystatus;
         const phone=this.state.phone;
-        
+        if(result!=''){
+          if(name!=''){
+            if(occupation!=''){
+              if(waystatus!=''){
+                if(phone!=''){
+                  if((phone.length)>=11){
             // Upload the image using the fetch and FormData APIs
             let formData = new FormData();
             // Assume "photo" is the name of the form field the server expects
@@ -59,7 +64,7 @@ export default class EditProfile extends React.Component{
             
         
             const {goBack} = this.props.navigation;
-
+        
        await fetch(`${API_URL}api/EditProfile`,{
             method:'post',
             headers:{
@@ -90,6 +95,29 @@ export default class EditProfile extends React.Component{
           }).catch((error)=>{
             console.error(error);
           });
+        }else{
+          Alert.alert("Phone Length is not Appriopriate")
+        }
+                }
+                else{
+                  Alert.alert("Please Enter Phone Number")  
+                }
+        }
+        else{
+          Alert.alert("Please Enter Way Status")
+        }
+        }
+        else{
+          Alert.alert("Please enter occupation")
+        }
+        }else{
+          Alert.alert("Please Enter name")
+        }
+
+        }else{
+          Alert.alert("Please Select Image")
+        }
+
       }
 
 

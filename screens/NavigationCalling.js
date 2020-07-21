@@ -68,7 +68,7 @@ const DrawerNavigator = createDrawerNavigator(
                 drawerIcon: ({ tintColor }) => <Feather name="message-square" size={16} color={tintColor} />
             }
         },
-        Orphanage_House: {
+        Donate_Meal: {
             screen: FoundationScreen,
             navigationOptions: {
                 drawerIcon: ({ tintColor }) => <Octicons name="organization" size={16} color={tintColor} />

@@ -30,7 +30,7 @@ export default class App extends Component {
         <Scene key="AvailableSeat" component={AvailableSeat} title="None " hideNavBar={true}  />
         <Scene key="Notifications" component={Notifications} title="None " hideNavBar={true}  />
         <Scene key="ReservedSeats" component={ReservedSeats} title="None " hideNavBar={true}  />
-
+       
         </Scene>
       </Router>
 

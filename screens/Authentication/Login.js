@@ -60,7 +60,8 @@ export default class Login extends Component {
           [
         {
           text: 'Continue', onPress: () => {
-             Actions.NavigationCalling();
+            Actions.NavigationCalling();
+             
           }
         }
       ],
